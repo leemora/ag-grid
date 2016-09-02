@@ -26,6 +26,7 @@ var context_3 = require("./context/context");
 var gridOptionsWrapper_1 = require("./gridOptionsWrapper");
 var context_4 = require("./context/context");
 var constants_1 = require("./constants");
+var filterManager_1 = require("./filter/filterManager");
 var SelectionController = (function () {
     function SelectionController() {
     }
@@ -203,6 +204,21 @@ var SelectionController = (function () {
         });
         this.eventService.dispatchEvent(events_1.Events.EVENT_SELECTION_CHANGED);
     };
+    SelectionController.prototype.selectAllUnfilteredRowNodes = function () {
+        var _this = this;
+        if (this.rowModel.getType() !== constants_1.Constants.ROW_MODEL_TYPE_NORMAL) {
+            throw 'selectAll only available with normal row model, ie not virtual pagination';
+        }
+        this.rowModel.forEachNode(function (rowNode) {
+            if (_this.filterManager.doesRowPassFilter(rowNode)) {
+                rowNode.selectThisNode(true);
+            }
+            else {
+                rowNode.selectThisNode(false);
+            }
+        });
+        this.eventService.dispatchEvent(events_1.Events.EVENT_SELECTION_CHANGED);
+    };
     // Deprecated method
     SelectionController.prototype.selectNode = function (rowNode, tryMulti) {
         rowNode.setSelectedParams({ newValue: true, clearSelection: !tryMulti });
@@ -233,6 +249,10 @@ var SelectionController = (function () {
         context_3.Autowired('gridOptionsWrapper'), 
         __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
     ], SelectionController.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_3.Autowired('filterManager'), 
+        __metadata('design:type', filterManager_1.FilterManager)
+    ], SelectionController.prototype, "filterManager", void 0);
     __decorate([
         __param(0, context_2.Qualifier('loggerFactory')), 
         __metadata('design:type', Function), 

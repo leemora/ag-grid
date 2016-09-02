@@ -222,6 +222,9 @@ var GridApi = (function () {
     GridApi.prototype.selectAll = function () {
         this.selectionController.selectAllRowNodes();
     };
+    GridApi.prototype.selectAllUnfiltered = function () {
+        this.selectionController.selectAllUnfilteredRowNodes();
+    };
     GridApi.prototype.deselectAll = function () {
         this.selectionController.deselectAllRowNodes();
     };

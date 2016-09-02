@@ -7,6 +7,7 @@ export declare class SelectionController {
     private eventService;
     private rowModel;
     private gridOptionsWrapper;
+    private filterManager;
     private selectedNodes;
     private logger;
     private lastSelectedNode;
@@ -29,6 +30,7 @@ export declare class SelectionController {
     isEmpty(): boolean;
     deselectAllRowNodes(): void;
     selectAllRowNodes(): void;
+    selectAllUnfilteredRowNodes(): void;
     selectNode(rowNode: RowNode, tryMulti: boolean): void;
     deselectIndex(rowIndex: number): void;
     deselectNode(rowNode: RowNode): void;
