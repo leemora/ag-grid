@@ -545,6 +545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GridOptionsWrapper.prototype.isSuppressHorizontalScroll = function () { return isTrue(this.gridOptions.suppressHorizontalScroll); };
 	    GridOptionsWrapper.prototype.isSuppressLoadingOverlay = function () { return isTrue(this.gridOptions.suppressLoadingOverlay); };
 	    GridOptionsWrapper.prototype.isSuppressNoRowsOverlay = function () { return isTrue(this.gridOptions.suppressNoRowsOverlay); };
+	    GridOptionsWrapper.prototype.isSuppressErrorOverlay = function () { return isTrue(this.gridOptions.suppressErrorOverlay); };
 	    GridOptionsWrapper.prototype.isSuppressFieldDotNotation = function () { return isTrue(this.gridOptions.suppressFieldDotNotation); };
 	    GridOptionsWrapper.prototype.getFloatingTopRowData = function () { return this.gridOptions.floatingTopRowData; };
 	    GridOptionsWrapper.prototype.getFloatingBottomRowData = function () { return this.gridOptions.floatingBottomRowData; };
@@ -614,6 +615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GridOptionsWrapper.prototype.getGroupRowRenderer = function () { return this.gridOptions.groupRowRenderer; };
 	    GridOptionsWrapper.prototype.getGroupRowRendererParams = function () { return this.gridOptions.groupRowRendererParams; };
 	    GridOptionsWrapper.prototype.getGroupRowInnerRenderer = function () { return this.gridOptions.groupRowInnerRenderer; };
+	    GridOptionsWrapper.prototype.getOverlayErrorTemplate = function () { return this.gridOptions.overlayErrorTemplate; };
 	    GridOptionsWrapper.prototype.getOverlayLoadingTemplate = function () { return this.gridOptions.overlayLoadingTemplate; };
 	    GridOptionsWrapper.prototype.getOverlayNoRowsTemplate = function () { return this.gridOptions.overlayNoRowsTemplate; };
 	    GridOptionsWrapper.prototype.getCheckboxSelection = function () { return this.gridOptions.checkboxSelection; };
@@ -2705,6 +2707,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    GridApi.prototype.showNoRowsOverlay = function () {
 	        this.gridPanel.showNoRowsOverlay();
+	    };
+	    GridApi.prototype.showErrorOverlay = function () {
+	        this.gridPanel.showErrorOverlay();
 	    };
 	    GridApi.prototype.hideOverlay = function () {
 	        this.gridPanel.hideOverlay();
@@ -7080,6 +7085,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var mainOverlayTemplate = '<div class="ag-overlay-panel">' +
 	    '<div class="ag-overlay-wrapper ag-overlay-[OVERLAY_NAME]-wrapper">[OVERLAY_TEMPLATE]</div>' +
 	    '</div>';
+	var defaultErrorOverlayTemplate = '<span class="ag-overlay-error-center">[ERROR...]</span>';
 	var defaultLoadingOverlayTemplate = '<span class="ag-overlay-loading-center">[LOADING...]</span>';
 	var defaultNoRowsOverlayTemplate = '<span class="ag-overlay-no-rows-center">[NO_ROWS_TO_SHOW]</span>';
 	var GridPanel = (function () {
@@ -7119,6 +7125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.useScrollLag = this.isUseScrollLag();
 	        this.layout = new borderLayout_1.BorderLayout({
 	            overlays: {
+	                error: utils_1.Utils.loadTemplate(this.createErrorOverlayTemplate()),
 	                loading: utils_1.Utils.loadTemplate(this.createLoadingOverlayTemplate()),
 	                noRows: utils_1.Utils.loadTemplate(this.createNoRowsOverlayTemplate())
 	            },
@@ -7373,6 +7380,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return template;
 	    };
+	    GridPanel.prototype.createErrorOverlayTemplate = function () {
+	        var userProvidedTemplate = this.gridOptionsWrapper.getOverlayErrorTemplate();
+	        var templateNotLocalised = this.createOverlayTemplate('error', defaultErrorOverlayTemplate, userProvidedTemplate);
+	        var localeTextFunc = this.gridOptionsWrapper.getLocaleTextFunc();
+	        var templateLocalised = templateNotLocalised.replace('[ERROR...]', localeTextFunc('error', 'Error...'));
+	        return templateLocalised;
+	    };
 	    GridPanel.prototype.createLoadingOverlayTemplate = function () {
 	        var userProvidedTemplate = this.gridOptionsWrapper.getOverlayLoadingTemplate();
 	        var templateNotLocalised = this.createOverlayTemplate('loading', defaultLoadingOverlayTemplate, userProvidedTemplate);
@@ -7537,6 +7551,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GridPanel.prototype.showNoRowsOverlay = function () {
 	        if (!this.gridOptionsWrapper.isSuppressNoRowsOverlay()) {
 	            this.layout.showOverlay('noRows');
+	        }
+	    };
+	    GridPanel.prototype.showErrorOverlay = function () {
+	        if (!this.gridOptionsWrapper.isSuppressErrorOverlay()) {
+	            this.layout.showOverlay('error');
 	        }
 	    };
 	    GridPanel.prototype.hideOverlay = function () {

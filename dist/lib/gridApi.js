@@ -248,6 +248,9 @@ var GridApi = (function () {
     GridApi.prototype.showNoRowsOverlay = function () {
         this.gridPanel.showNoRowsOverlay();
     };
+    GridApi.prototype.showErrorOverlay = function () {
+        this.gridPanel.showErrorOverlay();
+    };
     GridApi.prototype.hideOverlay = function () {
         this.gridPanel.hideOverlay();
     };

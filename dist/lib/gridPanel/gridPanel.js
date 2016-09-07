@@ -96,6 +96,7 @@ var gridForPrintHtml = '<div>' +
 var mainOverlayTemplate = '<div class="ag-overlay-panel">' +
     '<div class="ag-overlay-wrapper ag-overlay-[OVERLAY_NAME]-wrapper">[OVERLAY_TEMPLATE]</div>' +
     '</div>';
+var defaultErrorOverlayTemplate = '<span class="ag-overlay-error-center">[ERROR...]</span>';
 var defaultLoadingOverlayTemplate = '<span class="ag-overlay-loading-center">[LOADING...]</span>';
 var defaultNoRowsOverlayTemplate = '<span class="ag-overlay-no-rows-center">[NO_ROWS_TO_SHOW]</span>';
 var GridPanel = (function () {
@@ -135,6 +136,7 @@ var GridPanel = (function () {
         this.useScrollLag = this.isUseScrollLag();
         this.layout = new borderLayout_1.BorderLayout({
             overlays: {
+                error: utils_1.Utils.loadTemplate(this.createErrorOverlayTemplate()),
                 loading: utils_1.Utils.loadTemplate(this.createLoadingOverlayTemplate()),
                 noRows: utils_1.Utils.loadTemplate(this.createNoRowsOverlayTemplate())
             },
@@ -389,6 +391,13 @@ var GridPanel = (function () {
         }
         return template;
     };
+    GridPanel.prototype.createErrorOverlayTemplate = function () {
+        var userProvidedTemplate = this.gridOptionsWrapper.getOverlayErrorTemplate();
+        var templateNotLocalised = this.createOverlayTemplate('error', defaultErrorOverlayTemplate, userProvidedTemplate);
+        var localeTextFunc = this.gridOptionsWrapper.getLocaleTextFunc();
+        var templateLocalised = templateNotLocalised.replace('[ERROR...]', localeTextFunc('error', 'Error...'));
+        return templateLocalised;
+    };
     GridPanel.prototype.createLoadingOverlayTemplate = function () {
         var userProvidedTemplate = this.gridOptionsWrapper.getOverlayLoadingTemplate();
         var templateNotLocalised = this.createOverlayTemplate('loading', defaultLoadingOverlayTemplate, userProvidedTemplate);
@@ -553,6 +562,11 @@ var GridPanel = (function () {
     GridPanel.prototype.showNoRowsOverlay = function () {
         if (!this.gridOptionsWrapper.isSuppressNoRowsOverlay()) {
             this.layout.showOverlay('noRows');
+        }
+    };
+    GridPanel.prototype.showErrorOverlay = function () {
+        if (!this.gridOptionsWrapper.isSuppressErrorOverlay()) {
+            this.layout.showOverlay('error');
         }
     };
     GridPanel.prototype.hideOverlay = function () {

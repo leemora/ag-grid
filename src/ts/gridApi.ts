@@ -297,6 +297,10 @@ export class GridApi {
         this.gridPanel.showNoRowsOverlay();
     }
 
+    public showErrorOverlay(): void {
+        this.gridPanel.showErrorOverlay();
+    }
+
     public hideOverlay(): void {
         this.gridPanel.hideOverlay();
     }

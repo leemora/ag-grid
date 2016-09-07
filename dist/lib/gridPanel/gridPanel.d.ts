@@ -89,6 +89,7 @@ export declare class GridPanel {
     getPinnedRightFloatingBottom(): HTMLElement;
     getFloatingBottomContainer(): HTMLElement;
     private createOverlayTemplate(name, defaultTemplate, userProvidedTemplate);
+    private createErrorOverlayTemplate();
     private createLoadingOverlayTemplate();
     private createNoRowsOverlayTemplate();
     ensureIndexVisible(index: any): void;
@@ -102,6 +103,7 @@ export declare class GridPanel {
     ensureColumnVisible(key: any): void;
     showLoadingOverlay(): void;
     showNoRowsOverlay(): void;
+    showErrorOverlay(): void;
     hideOverlay(): void;
     private getWidthForSizeColsToFit();
     sizeColumnsToFit(nextTimeout?: number): void;

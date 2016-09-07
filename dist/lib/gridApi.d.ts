@@ -81,6 +81,7 @@ export declare class GridApi {
     sizeColumnsToFit(): void;
     showLoadingOverlay(): void;
     showNoRowsOverlay(): void;
+    showErrorOverlay(): void;
     hideOverlay(): void;
     isNodeSelected(node: any): any;
     getSelectedNodesById(): {
