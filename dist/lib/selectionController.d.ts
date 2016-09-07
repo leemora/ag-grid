@@ -28,7 +28,7 @@ export declare class SelectionController {
     getBestCostNodeSelection(): any;
     setRowModel(rowModel: any): void;
     isEmpty(): boolean;
-    deselectAllRowNodes(): void;
+    deselectAllRowNodes(suppressEvents: boolean): void;
     selectAllRowNodes(): void;
     selectAllUnfilteredRowNodes(): void;
     selectNode(rowNode: RowNode, tryMulti: boolean): void;

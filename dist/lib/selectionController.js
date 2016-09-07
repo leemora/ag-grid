@@ -179,7 +179,7 @@ var SelectionController = (function () {
         });
         return count === 0;
     };
-    SelectionController.prototype.deselectAllRowNodes = function () {
+    SelectionController.prototype.deselectAllRowNodes = function (suppressEvents) {
         utils_1.Utils.iterateObject(this.selectedNodes, function (nodeId, rowNode) {
             if (rowNode) {
                 rowNode.selectThisNode(false);
@@ -193,7 +193,9 @@ var SelectionController = (function () {
         // that we pick up, however it's good to clean it down, as we are still
         // left with entries pointing to 'undefined'
         this.selectedNodes = {};
-        this.eventService.dispatchEvent(events_1.Events.EVENT_SELECTION_CHANGED);
+        if (!suppressEvents) {
+            this.eventService.dispatchEvent(events_1.Events.EVENT_SELECTION_CHANGED);
+        }
     };
     SelectionController.prototype.selectAllRowNodes = function () {
         if (this.rowModel.getType() !== constants_1.Constants.ROW_MODEL_TYPE_NORMAL) {
